@@ -77,13 +77,12 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http)
             throws Exception {
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
-                )
-                // Form login handles the redirect to the login page from the
-                // authorization server filter chain
+                .authorizeHttpRequests((authorize) -> {
+                        authorize.requestMatchers("/").permitAll();
+                        authorize.anyRequest().authenticated();
+                })
                 .formLogin(Customizer.withDefaults())
-            .oauth2Login(Customizer.withDefaults());
+                .oauth2Login(Customizer.withDefaults());
 
         return http.build();
     }
